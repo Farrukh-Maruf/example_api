@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.get("/",response_model=List[schema.Post])
+@router.get("/limit",response_model=List[schema.Post])
 def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user), limit: int = 10):
 
     print(f"bu limit{limit}")    
@@ -19,7 +19,7 @@ def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.
     # print(posts)
     return posts
 
-@router.get("/", status_code=status.HTTP_201_CREATED, response_model = schema.Post)
+@router.get("/create_posts", status_code=status.HTTP_201_CREATED, response_model = schema.Post)
 def create_posts(post: schema.PostCreate, db: Session = Depends(get_db), get_current_user: int = Depends(oauth2.get_current_user)):
     # print(get_current_user)
     new_post = models.Post(**post.dict())

@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+    db:
+        image: postgres:15
+        restart: unless-stopped
+        environment:
+            POSTGRES_USER: ${DATABASE_USERNAME}
+            POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+            POSTGRES_DB: ${DATABASE_NAME}
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+
+    api:
+        build: .
+        depends_on:
+            - db
+        ports:
+            - "8000:8000" #can change to any port
+        volumes:  #can remove in production
+            - ./:/app:ro    #  mount the current directory so as to reflect code changes without rebuilding the image
+        # command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+        environment:
+            - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
+            - DATABASE_PORT=${DATABASE_PORT}
+            - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+            - DATABASE_NAME=${DATABASE_NAME}
+            - DATABASE_USERNAME=${DATABASE_USERNAME}
+            - SECRET_KEY=${SECRET_KEY}
+            - ALGORITHM=${ALGORITHM}
+            - ACCESS_TOKEN_EXPIRE_MINUTES=60
+
+volumes:
+    db_data:
