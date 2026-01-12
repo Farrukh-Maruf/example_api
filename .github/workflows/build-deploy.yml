@@ -9,4 +9,4 @@ jobs:
       - name: pulling git repo
         uses: actions/checkout@v2
       - name: setting hello farrukh
-        run: echo "posting from far"
+        run: echo "posting from fcdar"
