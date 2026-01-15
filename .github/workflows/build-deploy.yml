@@ -75,7 +75,7 @@ jobs:
   
   deploy:
     runs-on: ubuntu-latest
-    need: [build]
+    needs: [build]
 
     steps:
       - name: deploying steps
