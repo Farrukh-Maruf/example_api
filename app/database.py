@@ -39,3 +39,33 @@ while True:
     except Exception as error:
         print(f"Error {error}")
         time.sleep(2)
+
+# Note: avoid blocking work at import-time. Tests and CI import modules
+# (including `app.database`) during collection — a long-running retry loop
+# here can hang CI (as you observed). Provide a helper that callers can
+# invoke when an explicit wait is desired (for local/dev startup), but do
+# not run it automatically on import.
+
+def wait_for_db(retries: int = 5, delay: int = 2):
+    """Try to connect to the Postgres server a few times and return.
+
+    Raises an Exception if the DB is not reachable after the given retries.
+    This function is intentionally NOT called during module import.
+    """
+    for attempt in range(1, retries + 1):
+        try:
+            conn = psycopg2.connect(
+                host=settings.database_hostname,
+                database=settings.database_name,
+                user=settings.database_username,
+                password=settings.database_password,
+                cursor_factory=RealDictCursor,
+            )
+            conn.close()
+            print("Database reachable")
+            return True
+        except Exception as error:
+            print(f"Database not ready (attempt {attempt}/{retries}): {error}")
+            time.sleep(delay)
+
+    raise Exception("Database is not available after retries")
