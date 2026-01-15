@@ -71,7 +71,7 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
 
 
-      - name: push changes to production #this is for pushing each new code to production
+      # - name: push changes to production #this is for pushing each new code to production
   
   deploy:
     runs-on: ubuntu-latest
