@@ -78,5 +78,5 @@ jobs:
     need: [build]
 
     steps:
-      -name: deploying steps
+      - name: deploying steps
         run: echo "deploying to production server"
