@@ -88,3 +88,5 @@ jobs:
           # heroku_api_key: ${{secrets.HEROKU_API_KEY}} # thisis the API key 
           heroku_app_name: "fastapi-docker-prod" #${{ secrets.HEROKU_APP_NAME }} #must be unique name
           heroku_email: "<EMAIL>" #${{secrets.HEROKU_EMAIL}} #your heroku email 
+#and the rest of the deployment steps
+# prod_host, prod_username,prod_password and script: | cd app/src, git pull, echo prod_password | sudo _ systemctl retart api
